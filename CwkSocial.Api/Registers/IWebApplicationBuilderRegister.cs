@@ -1,6 +1,6 @@
 ﻿namespace CwkSocial.Api.Registers
 {
-    public interface IWebApplicationBuilderRegister
+    public interface IWebApplicationBuilderRegister : IRegister
     {
         void RegisterServices(WebApplicationBuilder builder);
     }
