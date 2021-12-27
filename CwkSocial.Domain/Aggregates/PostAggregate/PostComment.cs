@@ -14,7 +14,7 @@ namespace CwkSocial.Domain.Aggregates.PostAggregate
         }
         public Guid CommentId { get; private set; }
         public Guid PostId { get; private set; }
-        public string? Text { get; private set; }
+        public string Text { get; private set; }
         public Guid UserProfileId { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModified { get; private set; }

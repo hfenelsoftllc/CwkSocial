@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CwkSocial.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211223041110_Initial")]
+    [Migration("20211225113835_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -317,23 +317,18 @@ namespace CwkSocial.Api.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("CurrentCity")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("EmailAddress")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("FirstName")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("LastName")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Phone")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("UserProfileId");
@@ -350,26 +345,21 @@ namespace CwkSocial.Api.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("City")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Country")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("County")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<DateTime>("DateOfBirth")
                                 .HasColumnType("datetime2");
 
                             b1.Property<string>("PlaceOfBirth")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("State")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("UserProfileId");

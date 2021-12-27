@@ -13,13 +13,13 @@ namespace CwkSocial.Dal
 {
     public class DataContext: IdentityDbContext
     {
-        public DataContext(DbContextOptions options):base(options)
+        public DataContext(DbContextOptions options) : base(options)
         {
 
         }
-
-        DbSet<UserProfile> UserProfiles { get; set; }
-        DbSet<Post> Posts { get; set; }
+        
+        public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<Post> Posts { get; set; }
         //DbSet<BasicInfo> BasicInfos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

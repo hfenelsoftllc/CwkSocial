@@ -20,12 +20,12 @@ namespace CwkSocial.Domain.Aggregates.PostAggregate
 
         public Guid PostId { get; private set; }
         public Guid UserProfileId { get; private set; }
-        public UserProfile? UserProfile { get; private set; }
-        public string? TextContent { get; private set; }
+        public UserProfile UserProfile { get; private set; }
+        public string TextContent { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModified { get; private set; }
-        public IEnumerable<PostComment>? Comments { get { return _comments; } }
-        public IEnumerable<PostInteraction>? Interactions { get { return _interactions; } }
+        public IEnumerable<PostComment> Comments { get { return _comments; } }
+        public IEnumerable<PostInteraction> Interactions { get { return _interactions; } }
 
         //Factories Strategy
         public static Post CreatePost(Guid userProfileId, string textContent)

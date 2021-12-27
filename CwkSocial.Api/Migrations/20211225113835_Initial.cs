@@ -78,7 +78,7 @@ namespace CwkSocial.Api.Migrations
                     BasicInfo_EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BasicInfo_Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BasicInfo_CurrentCity = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BirthInfo_DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BirthInfo_DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BirthInfo_PlaceOfBirth = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BirthInfo_County = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BirthInfo_City = table.Column<string>(type: "nvarchar(max)", nullable: true),

@@ -315,23 +315,18 @@ namespace CwkSocial.Api.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("CurrentCity")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("EmailAddress")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("FirstName")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("LastName")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Phone")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("UserProfileId");
@@ -348,26 +343,21 @@ namespace CwkSocial.Api.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("City")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Country")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("County")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<DateTime>("DateOfBirth")
                                 .HasColumnType("datetime2");
 
                             b1.Property<string>("PlaceOfBirth")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("State")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("UserProfileId");
