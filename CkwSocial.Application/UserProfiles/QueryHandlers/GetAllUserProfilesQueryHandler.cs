@@ -1,4 +1,5 @@
-﻿using CkwSocial.Application.UserProfiles.Queries;
+﻿using CkwSocial.Application.Models;
+using CkwSocial.Application.UserProfiles.Queries;
 using CwkSocial.Dal;
 using CwkSocial.Domain.Aggregates.UserProfileAggregate;
 using MediatR;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CkwSocial.Application.UserProfiles.QueryHandlers
 {
-    internal class GetAllUserProfilesQueryHandler : IRequestHandler<GetAllUserProfiles, IEnumerable<UserProfile>>
+    internal class GetAllUserProfilesQueryHandler : IRequestHandler<GetAllUserProfiles, OperationResult<IEnumerable<UserProfile>>>
     {
         private readonly DataContext _ctx;
 
@@ -20,9 +21,11 @@ namespace CkwSocial.Application.UserProfiles.QueryHandlers
             _ctx = ctx; 
         }
 
-        public async Task<IEnumerable<UserProfile>> Handle(GetAllUserProfiles request, CancellationToken cancellationToken)
+        public async Task<OperationResult<IEnumerable<UserProfile>>> Handle(GetAllUserProfiles request, CancellationToken cancellationToken)
         {
-            return await _ctx.UserProfiles.ToListAsync();
+            var result = new OperationResult<IEnumerable<UserProfile>>();
+            result.Payload = await _ctx.UserProfiles.ToListAsync();
+            return result;
         }
 
 

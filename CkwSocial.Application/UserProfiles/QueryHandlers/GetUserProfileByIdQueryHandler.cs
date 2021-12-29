@@ -1,4 +1,5 @@
-﻿using CkwSocial.Application.UserProfiles.Queries;
+﻿using CkwSocial.Application.Models;
+using CkwSocial.Application.UserProfiles.Queries;
 using CwkSocial.Dal;
 using CwkSocial.Domain.Aggregates.UserProfileAggregate;
 using MediatR;
@@ -11,16 +12,31 @@ using System.Threading.Tasks;
 
 namespace CkwSocial.Application.UserProfiles.QueryHandlers
 {
-    internal class GetUserProfileByIdQueryHandler : IRequestHandler<GetUserProfileById, UserProfile>
+    internal class GetUserProfileByIdQueryHandler : IRequestHandler<GetUserProfileById, OperationResult<UserProfile>>
     {
         private readonly DataContext _ctx;
         public GetUserProfileByIdQueryHandler(DataContext ctx)
         {
             _ctx = ctx;
         }
-        public async Task<UserProfile> Handle(GetUserProfileById request, CancellationToken cancellationToken)
+        public async Task<OperationResult<UserProfile>> Handle(GetUserProfileById request, CancellationToken cancellationToken)
         {
-            return await _ctx.UserProfiles.FirstOrDefaultAsync(up =>up.UserProfileId == request.UserProfileId);
+            var result = new OperationResult<UserProfile>();
+
+            var profile = await _ctx.UserProfiles.FirstOrDefaultAsync(up =>up.UserProfileId == request.UserProfileId);
+           
+            if (profile == null)
+            {
+                var error = new Error
+                {
+                    Code = Enums.ErrorCode.NotFound,
+                    Message = $"No UserProfile found with ID {request.UserProfileId} does not exist.",
+                };
+                result.Errors.Add(error);
+                return result;
+            }
+            result.Payload = profile;
+            return result;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CwkSocial.Domain.Aggregates.UserProfileAggregate;
+﻿using CkwSocial.Application.Models;
+using CwkSocial.Domain.Aggregates.UserProfileAggregate;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CkwSocial.Application.UserProfiles.Queries
 {
-    public class GetAllUserProfiles : IRequest<IEnumerable<UserProfile>>
+    public class GetAllUserProfiles : IRequest<OperationResult<IEnumerable<UserProfile>>>
     {
 
     }
