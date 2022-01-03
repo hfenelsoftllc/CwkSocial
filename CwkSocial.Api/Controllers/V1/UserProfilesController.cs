@@ -3,7 +3,6 @@ using CkwSocial.Application.UserProfiles.Commands;
 using CkwSocial.Application.UserProfiles.Queries;
 using CwkSocial.Api.Contracts.UserProfiles.Requests;
 using CwkSocial.Api.Contracts.UserProfiles.Responses;
-using CkwSocial.Application.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,14 +11,16 @@ namespace CwkSocial.Api.Controllers.V1
     [ApiVersion("1.0")]
     [ApiController]
     [Route(ApiRoutes.BaseRoute)]
-    public class UserProfilesController: Controller
+    public class UserProfilesController: BaseController
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        public UserProfilesController(IMediator mediator, IMapper mapper)
+        private readonly ILogger<UserProfilesController> _logger;
+        public UserProfilesController(IMediator mediator, IMapper mapper, ILogger<UserProfilesController> logger)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _logger = logger;
         }
            
         [HttpGet]
@@ -28,6 +29,8 @@ namespace CwkSocial.Api.Controllers.V1
             var query = new GetAllUserProfiles();
             var response = await _mediator.Send(query);
             var profile = _mapper.Map<List<UserProfileResponse>>(response.Payload);
+            
+            //_logger.LogInformation("Getting user profile from url:",profile);
 
             return Ok(profile);
         }       
@@ -42,6 +45,8 @@ namespace CwkSocial.Api.Controllers.V1
                 UserProfileId = Guid.Parse(id),
             };
             var response = await _mediator.Send(query);
+            if (response.isError)
+                return HandleErrorResponse(response.Errors);
 
             var userProfile = _mapper.Map<UserProfileResponse>(response.Payload);
             return Ok(userProfile);
@@ -67,15 +72,8 @@ namespace CwkSocial.Api.Controllers.V1
             var command = _mapper.Map<UpdateUserProfileBasicInfo>(updatedProfile);
             command.UserProfileId = Guid.Parse(id);
             var response = await _mediator.Send(command);
-
-            if (response.isError)
-            {
-                if (response.Errors.Any(e =>e.Code == ErrorCode.NotFound))
-                {
-                    var error = response.Errors.FirstOrDefault(e =>e.Code == ErrorCode.NotFound);
-                }
-            }
-            return NoContent();
+                        
+            return response.isError ? HandleErrorResponse(response.Errors) : NoContent();
         }
 
 
@@ -86,7 +84,8 @@ namespace CwkSocial.Api.Controllers.V1
             var command = new DeleteUserProfile { UserProfileId = Guid.Parse(id) };
             var response = await _mediator.Send(command);
 
-            return NoContent();
+            return response.isError ? HandleErrorResponse(response.Errors) : NoContent();
+
         }
     }
 }
