@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CwkSocial.Domain.Exceptions;
+using CwkSocial.Domain.Validators.UserProfileValidators;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,10 +25,11 @@ namespace CwkSocial.Domain.Aggregates.UserProfileAggregate
         //Factories Strategy
         public static BirthInfo CreateBirthInfo(DateTime dateofbirth, string placeofbirth,string county,string city, string state,string country)
         {
-            // TO DO: add validation, error handling, error notification strategy
+            // add validation, error handling, error notification strategy
 
+            var validator = new BirthInfoValidator();
 
-            return new BirthInfo
+            var objToValidate = new BirthInfo
             {
                 DateOfBirth = dateofbirth,
                 PlaceOfBirth = placeofbirth,
@@ -35,6 +38,19 @@ namespace CwkSocial.Domain.Aggregates.UserProfileAggregate
                 State = state,
                 Country = country
             };
+
+
+            var validateResult = validator.Validate(objToValidate);
+
+            if (validateResult.IsValid) return objToValidate;
+
+            var exception = new UserProfileNotValidException("The birth Info is not valid");
+            foreach (var error in validateResult.Errors)
+            {
+                exception.ValidationErrors.Add(error.ErrorMessage);
+            }
+            throw exception;
+
         }
 
     }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CwkSocial.Domain.Exceptions;
+using CwkSocial.Domain.Validators.UserProfileValidators;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,11 +22,15 @@ namespace CwkSocial.Domain.Aggregates.UserProfileAggregate
 
 
         //Factories Strategy
+        //public static BasicInfo TryCreateBasicInfo(string firstname, string lastname, string emailaddress, string phone, string currentcity, out BasicInfo basicInfo){}
+
         public static BasicInfo CreateBasicInfo(string firstname, string lastname, string emailaddress, string phone, string currentcity)
         {
             // TO DO: add validation, error handling, error notification strategy
 
-            return new BasicInfo
+            var validator = new BasicInfoValidator();
+
+            var objToValidate = new BasicInfo
             {
                 FirstName = firstname,
                 LastName = lastname,
@@ -32,6 +38,16 @@ namespace CwkSocial.Domain.Aggregates.UserProfileAggregate
                 Phone = phone,
                 CurrentCity = currentcity
             };
+
+            var validateResult = validator.Validate(objToValidate);
+
+            if (validateResult.IsValid) return objToValidate;
+            var exception = new UserProfileNotValidException("The user profile is not valid");
+            foreach(var error in validateResult.Errors)
+            {
+                exception.ValidationErrors.Add(error.ErrorMessage);
+            }
+            throw exception;
         }
 
     }

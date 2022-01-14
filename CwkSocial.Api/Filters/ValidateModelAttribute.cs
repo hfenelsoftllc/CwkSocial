@@ -8,7 +8,7 @@ namespace CwkSocial.Api.Filters
     {
         public override void OnResultExecuting(ResultExecutingContext context)
         {
-            if (context.ModelState.IsValid)
+            if (!context.ModelState.IsValid)
             {
                 var apiError = new ErrorResponse();
                 apiError.StatusCode = 400;

@@ -1,7 +1,9 @@
-﻿using CkwSocial.Application.Models;
+﻿using CkwSocial.Application.Enums;
+using CkwSocial.Application.Models;
 using CkwSocial.Application.UserProfiles.Commands;
 using CwkSocial.Dal;
 using CwkSocial.Domain.Aggregates.UserProfileAggregate;
+using CwkSocial.Domain.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,19 +52,30 @@ namespace CkwSocial.Application.UserProfiles.CommandHandlers
                 return result;
 
             }
+            catch (UserProfileNotValidException ex)
+            {
+                result.isError = true;
+                ex.ValidationErrors.ForEach(e =>
+                {
+                    var error = new Error
+                    {
+                        Code = ErrorCode.ValidationError,
+                        Message = $"{ex.Message}"
+                    };
+                    result.Errors.Add(error);
+                });
+                return result;
+            }
             catch (Exception e)
             {
-
                 var error = new Error
                 {
-                    Code = Enums.ErrorCode.ServerError,
-                    Message = e.Message,
+                    Code = ErrorCode.UnknownError,
+                    Message = $"{e.Message}"
                 };
-                result.isError = true;
-                result.Errors.Add(error);
+                return result;
             }
-            return result;
-            
+
         }
     }
 }

@@ -3,6 +3,7 @@ using CkwSocial.Application.UserProfiles.Commands;
 using CkwSocial.Application.UserProfiles.Queries;
 using CwkSocial.Api.Contracts.UserProfiles.Requests;
 using CwkSocial.Api.Contracts.UserProfiles.Responses;
+using CwkSocial.Api.Filters;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,12 +16,12 @@ namespace CwkSocial.Api.Controllers.V1
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private readonly ILogger<UserProfilesController> _logger;
-        public UserProfilesController(IMediator mediator, IMapper mapper, ILogger<UserProfilesController> logger)
+        //private readonly ILogger<UserProfilesController> _logger;
+        public UserProfilesController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
             _mapper = mapper;
-            _logger = logger;
+           // _logger = logger;
         }
            
         [HttpGet]
@@ -38,6 +39,7 @@ namespace CwkSocial.Api.Controllers.V1
 
         [Route(ApiRoutes.UserProfiles.IdRoute)]
         [HttpGet]
+        [ValidateGuid("id")]
         public async Task<IActionResult> GetUserProfileById(string id)
         {
             var query = new GetUserProfileById
@@ -53,15 +55,20 @@ namespace CwkSocial.Api.Controllers.V1
         }
 
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> CreateUserProfile([FromBody] UserProfileCreateUpdate profile)
         {
             var command = _mapper.Map<CreateUserCommand>(profile);
-            var response = await _mediator.Send(command);  
+            var response = await _mediator.Send(command);
+
+            //if (response.isError)
+            //    return HandleErrorResponse(response.Errors);
+
             var userProfile = _mapper.Map<UserProfileResponse>(response.Payload);
+
             //return CreatedAtActionResult(nameof(GetUserProfileById), new { id = response.UserProfileId }, userProfile); //
-            return CreatedAtAction(nameof(GetUserProfileById), 
-                            new { id = response.Payload.UserProfileId }, 
-                            userProfile);
+            return response.isError? HandleErrorResponse(response.Errors): CreatedAtAction(nameof(GetUserProfileById), 
+                            new { id = userProfile.UserProfileId }, userProfile);
         }
 
 

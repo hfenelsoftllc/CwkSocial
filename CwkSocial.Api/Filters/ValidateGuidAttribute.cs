@@ -15,9 +15,9 @@ namespace CwkSocial.Api.Filters
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if(context.ActionArguments.TryGetValue(_key, out var value))
+            if(!context.ActionArguments.TryGetValue(_key, out var value))
             {
-                if(!Guid.TryParse(value.ToString(), out Guid guid))
+                if(Guid.TryParse(value.ToString(), out Guid guid))
                 {
                     var apiError = new ErrorResponse();
                     apiError.StatusCode = 400;
